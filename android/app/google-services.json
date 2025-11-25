@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "224673754882",
+    "project_id": "app-reservation-de-ressources",
+    "storage_bucket": "app-reservation-de-ressources.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224673754882:android:5f968f0594fa928a745c1b",
+        "android_client_info": {
+          "package_name": "com.example.application_de_reservation_de_ressources"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw1NmtLQIi7zVNBsI9EEfgtIhOGJRA_lY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
