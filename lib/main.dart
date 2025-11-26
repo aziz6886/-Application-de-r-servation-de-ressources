@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'views/auth/login_page.dart';
+import 'views/auth/signup_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,23 +17,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: const PlaceholderStartPage(), // temporary page
-    );
-  }
-}
-
-class PlaceholderStartPage extends StatelessWidget {
-  const PlaceholderStartPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "Welcome to Resource Booking App",
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+      initialRoute: '/login',  // START AT LOGIN PAGE
+      routes: {
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
+      },
     );
   }
 }
