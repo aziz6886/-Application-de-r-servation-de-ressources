@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../views/home/resource_details_page.dart';
+
 
 class ResourceCard extends StatelessWidget {
   final String name;
@@ -18,8 +20,18 @@ class ResourceCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       child: InkWell(
         onTap: () {
-          // Later: navigate to resource details
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ResourceDetailsPage(
+                name: name,
+                description: description,
+                imageUrl: imageUrl,
+              ),
+            ),
+          );
         },
+
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(

@@ -9,19 +9,19 @@ class HomePage extends StatelessWidget {
     // Temporary resource list (later will come from Firebase)
     final List<Map<String, dynamic>> resources = [
       {
-        "name": "Meeting Room A",
+        "name": "• Salles de réunion",
         "description": "Capacity: 10 people",
-        "image": "https://via.placeholder.com/150"
+        "image": ""
       },
       {
-        "name": "Conference Room B",
+        "name": "véhicules",
         "description": "Capacity: 20 people",
-        "image": "https://via.placeholder.com/150"
+        "image": ""
       },
       {
-        "name": "Company Car",
+        "name": "ordinateurs",
         "description": "Available for business trips",
-        "image": "https://via.placeholder.com/150"
+        "image": ""
       },
     ];
 

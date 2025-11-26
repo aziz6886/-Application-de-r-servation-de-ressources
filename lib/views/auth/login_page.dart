@@ -42,7 +42,7 @@ class LoginPage extends StatelessWidget {
                 // Login button
                 ElevatedButton(
                   onPressed: () {
-                    // action later
+                    Navigator.pushNamed(context, '/home');  // THIS IS CORRECT
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 14),
