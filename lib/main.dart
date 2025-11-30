@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+import 'package:provider/provider.dart';
+import 'providers/auth_provider.dart';
+
 import 'views/auth/login_page.dart';
 import 'views/auth/signup_page.dart';
 import 'views/home/home_page.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +37,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      initialRoute: '/login',  // START AT LOGIN PAGE
+
+      // Start at Login Page
+      initialRoute: '/login',
+
       routes: {
         '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignupPage(),
