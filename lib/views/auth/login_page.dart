@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/auth_provider.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -20,42 +25,48 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
 
-                // Email field
                 TextField(
-                  decoration: InputDecoration(
+                  controller: emailController,
+                  decoration: const InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 16),
 
-                // Password field
                 TextField(
+                  controller: passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Password",
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 24),
 
-                // Login button
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/home');  // THIS IS CORRECT
+                  onPressed: () async {
+                    final email = emailController.text.trim();
+                    final password = passwordController.text.trim();
+
+                    bool success = await context.read<AuthProvider>().login(email, password);
+
+                    if (success) {
+                      Navigator.pushNamed(context, '/home');
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Invalid email or password")),
+                      );
+                    }
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 14),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(fontSize: 18),
-                    ),
+                    child: Text("Login", style: TextStyle(fontSize: 18)),
                   ),
                 ),
 
                 const SizedBox(height: 18),
 
-                // Signup link
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/signup');

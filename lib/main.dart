@@ -24,6 +24,7 @@ void main() async {
       child: const MyApp(),
     ),
   );
+
 }
 
 class MyApp extends StatelessWidget {
@@ -32,18 +33,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Reservation',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
-
-      // Start at Login Page
       initialRoute: '/login',
-
       routes: {
-        '/login': (context) => const LoginPage(),
-        '/signup': (context) => const SignupPage(),
+        '/login': (context) => LoginPage(),
+        '/signup': (context) => SignupPage(),
         '/home': (context) => const HomePage(),
       },
     );

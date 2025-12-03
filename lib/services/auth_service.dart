@@ -12,7 +12,7 @@ class AuthService {
       );
       return userCred.user;
     } catch (e) {
-      print("SignUp Error: $e");
+      print("Signup error: $e");
       return null;
     }
   }
@@ -26,7 +26,7 @@ class AuthService {
       );
       return userCred.user;
     } catch (e) {
-      print("Login Error: $e");
+      print("Login error: $e");
       return null;
     }
   }
@@ -35,7 +35,4 @@ class AuthService {
   Future<void> logout() async {
     await _auth.signOut();
   }
-
-  // CURRENT USER
-  User? get currentUser => _auth.currentUser;
 }
