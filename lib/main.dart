@@ -4,6 +4,7 @@ import 'firebase_options.dart';
 
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
+import 'providers/resource_provider.dart';
 
 import 'views/auth/login_page.dart';
 import 'views/auth/signup_page.dart';
@@ -20,6 +21,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ResourceProvider()),
+
       ],
       child: const MyApp(),
     ),
