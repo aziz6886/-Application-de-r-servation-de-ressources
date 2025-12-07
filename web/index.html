@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -25,14 +12,38 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="application_de_reservation_de_ressources">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
+q
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
   <title>application_de_reservation_de_ressources</title>
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+<!-- Firebase SDK: Modular for Web v9+ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA3B_F-lIvU9HK2YiYAmRJqLa4QcqorKHI",
+    authDomain: "app-reservation-de-ressources.firebaseapp.com",
+    projectId: "app-reservation-de-ressources",
+    storageBucket: "app-reservation-de-ressources.firebasestorage.app",
+    messagingSenderId: "224673754882",
+    appId: "1:224673754882:web:ecef76d9f9453f63745c1b"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Optional: check initialization in console
+  console.log("Firebase initialized", app);
+</script>
+
+<!-- Flutter main script -->
+<script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
