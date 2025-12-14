@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../views/home/resource_details_page.dart';
 
-
 class ResourceCard extends StatelessWidget {
   final String name;
   final String description;
@@ -31,20 +30,24 @@ class ResourceCard extends StatelessWidget {
             ),
           );
         },
-
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
-              // Image
+              // ✅ SAFE IMAGE HANDLING
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
+                child: imageUrl.isNotEmpty
+                    ? Image.network(
                   imageUrl,
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
-                ),
+                  errorBuilder: (context, error, stackTrace) {
+                    return _placeholder();
+                  },
+                )
+                    : _placeholder(),
               ),
 
               const SizedBox(width: 16),
@@ -56,8 +59,10 @@ class ResourceCard extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style:
-                      const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 6),
                     Text(description),
@@ -67,6 +72,19 @@ class ResourceCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _placeholder() {
+    return Container(
+      width: 80,
+      height: 80,
+      color: Colors.grey.shade300,
+      child: const Icon(
+        Icons.inventory_2,
+        size: 40,
+        color: Colors.grey,
       ),
     );
   }
