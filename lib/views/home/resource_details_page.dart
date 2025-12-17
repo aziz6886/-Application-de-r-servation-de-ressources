@@ -72,6 +72,7 @@ class ResourceDetailsPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 14),
                   child: Text("Reserve", style: TextStyle(fontSize: 18)),
                 ),
+
               )
 
             ),

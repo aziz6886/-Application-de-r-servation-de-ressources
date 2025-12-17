@@ -8,7 +8,7 @@ class CalendarProvider extends ChangeNotifier {
   DateTime selectedDate = DateTime.now();
   List<ReservationModel> reservations = [];
 
-  /// Change selected date
+  /// Select a date
   void selectDate(DateTime date) {
     selectedDate = date;
     notifyListeners();
@@ -24,7 +24,12 @@ class CalendarProvider extends ChangeNotifier {
     });
   }
 
-  /// Check if selected date is available
+  /// Create reservation
+  Future<void> createReservation(ReservationModel reservation) async {
+    await _reservationService.createReservation(reservation);
+  }
+
+  /// Check if date already reserved
   bool isDateAvailable(DateTime date) {
     for (var reservation in reservations) {
       if (_isSameDay(reservation.date, date)) {
