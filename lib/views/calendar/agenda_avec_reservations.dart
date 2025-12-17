@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../providers/calendar_provider.dart';
 import '../../models/reservation_model.dart';
+import '../../providers/calendar_provider.dart';
+import '../../services/reservation_service.dart';
 
 class CalendarPage extends StatefulWidget {
   final String resourceId;
@@ -25,6 +26,8 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime? _selectedDay;
   String? selectedTimeSlot;
 
+  final ReservationService _reservationService = ReservationService();
+
   final List<String> timeSlots = [
     "09:00 - 10:00",
     "10:00 - 11:00",
@@ -37,12 +40,18 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
-    context.read<CalendarProvider>().loadReservations(widget.resourceId);
+
+    /// 🔥 Load reservations for this resource
+    Future.microtask(() {
+      context
+          .read<CalendarProvider>()
+          .loadReservations(widget.resourceId);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final calendar = context.watch<CalendarProvider>();
+    final calendarProvider = context.watch<CalendarProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -52,19 +61,19 @@ class _CalendarPageState extends State<CalendarPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            /// CALENDAR
+            /// 📅 CALENDAR
             TableCalendar(
-              firstDay: DateTime.now(),
-              lastDay: DateTime.now().add(const Duration(days: 365)),
+              firstDay: DateTime.utc(2024, 1, 1),
+              lastDay: DateTime.utc(2030, 12, 31),
               focusedDay: _focusedDay,
               selectedDayPredicate: (day) =>
                   isSameDay(_selectedDay, day),
-              enabledDayPredicate: (day) =>
-                  calendar.isDateAvailable(day),
               onDaySelected: (selectedDay, focusedDay) {
+                calendarProvider.setDate(selectedDay);
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
+                  selectedTimeSlot = null;
                 });
               },
               calendarFormat: CalendarFormat.month,
@@ -72,6 +81,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
             const SizedBox(height: 20),
 
+            /// ⏰ TIME SLOTS
             const Text(
               "Available Time Slots",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -79,76 +89,36 @@ class _CalendarPageState extends State<CalendarPage> {
 
             const SizedBox(height: 10),
 
-            /// TIME SLOTS
             Wrap(
               spacing: 10,
               runSpacing: 10,
               children: timeSlots.map((slot) {
-                final isSelected = selectedTimeSlot == slot;
+                final available =
+                calendarProvider.isTimeSlotAvailable(slot);
+
                 return ChoiceChip(
                   label: Text(slot),
-                  selected: isSelected,
-                  onSelected: (_) {
+                  selected: selectedTimeSlot == slot,
+                  selectedColor: Colors.green,
+                  disabledColor: Colors.grey.shade400,
+                  onSelected: available
+                      ? (_) {
                     setState(() {
                       selectedTimeSlot = slot;
                     });
-                  },
+                  }
+                      : null,
                 );
               }).toList(),
             ),
 
             const Spacer(),
 
-            /// CONFIRM BUTTON
+            /// ✅ CONFIRM BUTTON
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: (_selectedDay == null || selectedTimeSlot == null)
-                    ? null
-                    : () async {
-                  final userId =
-                      FirebaseAuth.instance.currentUser!.uid;
-
-                  final times =
-                  selectedTimeSlot!.split(" - ");
-
-                  final startTime = DateTime(
-                    _selectedDay!.year,
-                    _selectedDay!.month,
-                    _selectedDay!.day,
-                    int.parse(times[0].split(":")[0]),
-                  );
-
-                  final endTime = DateTime(
-                    _selectedDay!.year,
-                    _selectedDay!.month,
-                    _selectedDay!.day,
-                    int.parse(times[1].split(":")[0]),
-                  );
-
-                  final reservation = ReservationModel(
-                    id: '',
-                    resourceId: widget.resourceId,
-                    resourceName: widget.resourceName,
-                    userId: userId,
-                    date: _selectedDay!,
-                    startTime: startTime,
-                    endTime: endTime,
-                    status: 'pending',
-                  );
-
-                  await context
-                      .read<CalendarProvider>()
-                      .createReservation(reservation);
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content:
-                        Text("Reservation created successfully")),
-                  );
-
-                  Navigator.pop(context);
-                },
+                onPressed: _confirmReservation,
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 14),
                   child: Text(
@@ -162,5 +132,55 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
     );
+  }
+
+  /// 🔥 CREATE RESERVATION
+  Future<void> _confirmReservation() async {
+    if (_selectedDay == null || selectedTimeSlot == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Select date and time")),
+      );
+      return;
+    }
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final times = selectedTimeSlot!.split(" - ");
+
+    final startTime = DateTime(
+      _selectedDay!.year,
+      _selectedDay!.month,
+      _selectedDay!.day,
+      int.parse(times[0].split(":")[0]),
+    );
+
+    final endTime = DateTime(
+      _selectedDay!.year,
+      _selectedDay!.month,
+      _selectedDay!.day,
+      int.parse(times[1].split(":")[0]),
+    );
+
+    final reservation = ReservationModel(
+      id: '',
+      resourceId: widget.resourceId,
+      resourceName: widget.resourceName,
+      userId: user.uid,
+      date: _selectedDay!,
+      startTime: startTime,
+      endTime: endTime,
+      status: 'pending',
+    );
+
+    await _reservationService.createReservation(reservation);
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Reservation created")),
+    );
+
+    Navigator.pop(context);
   }
 }

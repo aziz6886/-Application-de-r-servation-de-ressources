@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import '../calendar/agenda_avec_reservations.dart';
 
 class ResourceDetailsPage extends StatelessWidget {
+  final String resourceId; // ✅ REQUIRED
   final String name;
   final String description;
   final String imageUrl;
 
   const ResourceDetailsPage({
     super.key,
+    required this.resourceId,
     required this.name,
     required this.description,
     required this.imageUrl,
@@ -24,11 +26,13 @@ class ResourceDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image
+            /// IMAGE
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                imageUrl,
+                imageUrl.isEmpty
+                    ? 'https://via.placeholder.com/400'
+                    : imageUrl,
                 height: 220,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -37,7 +41,7 @@ class ResourceDetailsPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Name
+            /// NAME
             Text(
               name,
               style: const TextStyle(
@@ -48,7 +52,7 @@ class ResourceDetailsPage extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // Description
+            /// DESCRIPTION
             Text(
               description,
               style: const TextStyle(fontSize: 18),
@@ -56,7 +60,7 @@ class ResourceDetailsPage extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // Reserve Button
+            /// 🔥 RESERVE BUTTON (FIXED)
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -64,19 +68,22 @@ class ResourceDetailsPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CalendarPage(resourceName: name),
+                      builder: (_) => CalendarPage(
+                        resourceId: resourceId, // ✅ NOW PROVIDED
+                        resourceName: name,
+                      ),
                     ),
                   );
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 14),
-                  child: Text("Reserve", style: TextStyle(fontSize: 18)),
+                  child: Text(
+                    "Reserve",
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
-
-              )
-
+              ),
             ),
-
           ],
         ),
       ),

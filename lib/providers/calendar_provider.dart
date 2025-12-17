@@ -8,13 +8,7 @@ class CalendarProvider extends ChangeNotifier {
   DateTime selectedDate = DateTime.now();
   List<ReservationModel> reservations = [];
 
-  /// Select a date
-  void selectDate(DateTime date) {
-    selectedDate = date;
-    notifyListeners();
-  }
-
-  /// Listen to reservations for a resource
+  /// Load reservations for resource
   void loadReservations(String resourceId) {
     _reservationService
         .getReservationsForResource(resourceId)
@@ -24,24 +18,33 @@ class CalendarProvider extends ChangeNotifier {
     });
   }
 
-  /// Create reservation
-  Future<void> createReservation(ReservationModel reservation) async {
-    await _reservationService.createReservation(reservation);
+  /// Change selected date
+  void setDate(DateTime date) {
+    selectedDate = date;
+    notifyListeners();
   }
 
-  /// Check if date already reserved
-  bool isDateAvailable(DateTime date) {
-    for (var reservation in reservations) {
-      if (_isSameDay(reservation.date, date)) {
-        return false;
+  /// Check if time slot is already reserved
+  bool isTimeSlotAvailable(String slot) {
+    final times = slot.split(" - ");
+
+    final startHour = int.parse(times[0].split(":")[0]);
+    final endHour = int.parse(times[1].split(":")[0]);
+
+    for (var r in reservations) {
+      if (_isSameDay(r.date, selectedDate)) {
+        if (r.startTime.hour == startHour &&
+            r.endTime.hour == endHour) {
+          return false;
+        }
       }
     }
     return true;
   }
 
-  bool _isSameDay(DateTime d1, DateTime d2) {
-    return d1.year == d2.year &&
-        d1.month == d2.month &&
-        d1.day == d2.day;
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year &&
+        a.month == b.month &&
+        a.day == b.day;
   }
 }

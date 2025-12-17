@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import '../views/home/resource_details_page.dart';
 
 class ResourceCard extends StatelessWidget {
+  final String resourceId; // ✅ ADD THIS
   final String name;
   final String description;
   final String imageUrl;
 
   const ResourceCard({
     super.key,
+    required this.resourceId,
     required this.name,
     required this.description,
     required this.imageUrl,
@@ -22,7 +24,8 @@ class ResourceCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ResourceDetailsPage(
+              builder: (_) => ResourceDetailsPage(
+                resourceId: resourceId, // ✅ FIXED
                 name: name,
                 description: description,
                 imageUrl: imageUrl,
@@ -34,7 +37,6 @@ class ResourceCard extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
-              // ✅ SAFE IMAGE HANDLING
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: imageUrl.isNotEmpty
@@ -43,16 +45,10 @@ class ResourceCard extends StatelessWidget {
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return _placeholder();
-                  },
                 )
                     : _placeholder(),
               ),
-
               const SizedBox(width: 16),
-
-              // Text info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
