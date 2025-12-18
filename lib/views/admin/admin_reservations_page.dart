@@ -55,7 +55,6 @@ class AdminReservationsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// TITLE
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

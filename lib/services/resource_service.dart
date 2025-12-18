@@ -14,17 +14,14 @@ class ResourceService {
     );
   }
 
-  /// CREATE
   Future<void> addResource(Resource resource) async {
     await _db.add(resource.toMap());
   }
 
-  /// UPDATE
   Future<void> updateResource(Resource resource) async {
     await _db.doc(resource.id).update(resource.toMap());
   }
 
-  /// DELETE
   Future<void> deleteResource(String id) async {
     await _db.doc(id).delete();
   }

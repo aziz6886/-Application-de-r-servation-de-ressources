@@ -28,7 +28,6 @@ class Resource {
     };
   }
 
-  /// 🔧 ADD THIS
   Resource copyWith({
     String? name,
     String? description,

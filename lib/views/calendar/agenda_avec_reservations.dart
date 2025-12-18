@@ -41,7 +41,6 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     super.initState();
 
-    /// 🔥 Load reservations for this resource
     Future.microtask(() {
       context
           .read<CalendarProvider>()
@@ -61,7 +60,6 @@ class _CalendarPageState extends State<CalendarPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            /// 📅 CALENDAR
             TableCalendar(
               firstDay: DateTime.utc(2024, 1, 1),
               lastDay: DateTime.utc(2030, 12, 31),
@@ -114,7 +112,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
             const Spacer(),
 
-            /// ✅ CONFIRM BUTTON
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -134,7 +131,6 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  /// 🔥 CREATE RESERVATION
   Future<void> _confirmReservation() async {
     if (_selectedDay == null || selectedTimeSlot == null) {
       ScaffoldMessenger.of(context).showSnackBar(

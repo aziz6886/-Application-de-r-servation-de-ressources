@@ -52,7 +52,6 @@ class ResourceDetailsPage extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            /// DESCRIPTION
             Text(
               description,
               style: const TextStyle(fontSize: 18),
@@ -60,7 +59,6 @@ class ResourceDetailsPage extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            /// 🔥 RESERVE BUTTON (FIXED)
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

@@ -50,7 +50,6 @@ class HomePage extends StatelessWidget {
 
       ),
 
-      /// 🔥 RESOURCES LIST FROM FIRESTORE
       body: StreamBuilder<List<Resource>>(
         stream: context.watch<ResourceProvider>().resourcesStream,
         builder: (context, snapshot) {
@@ -82,7 +81,6 @@ class HomePage extends StatelessWidget {
         },
       ),
 
-      /// 👤 MY RESERVATIONS BUTTON
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.event),
         label: const Text("My Reservations"),

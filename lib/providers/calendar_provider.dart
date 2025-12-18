@@ -8,7 +8,6 @@ class CalendarProvider extends ChangeNotifier {
   DateTime selectedDate = DateTime.now();
   List<ReservationModel> reservations = [];
 
-  /// Load reservations for resource
   void loadReservations(String resourceId) {
     _reservationService
         .getReservationsForResource(resourceId)
@@ -18,13 +17,11 @@ class CalendarProvider extends ChangeNotifier {
     });
   }
 
-  /// Change selected date
   void setDate(DateTime date) {
     selectedDate = date;
     notifyListeners();
   }
 
-  /// Check if time slot is already reserved
   bool isTimeSlotAvailable(String slot) {
     final times = slot.split(" - ");
 

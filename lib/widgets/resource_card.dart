@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../views/home/resource_details_page.dart';
 
 class ResourceCard extends StatelessWidget {
-  final String resourceId; // ✅ ADD THIS
+  final String resourceId;
   final String name;
   final String description;
   final String imageUrl;
@@ -25,7 +25,7 @@ class ResourceCard extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => ResourceDetailsPage(
-                resourceId: resourceId, // ✅ FIXED
+                resourceId: resourceId,
                 name: name,
                 description: description,
                 imageUrl: imageUrl,

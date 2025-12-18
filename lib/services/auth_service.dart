@@ -5,7 +5,6 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // SIGN UP
   Future<User?> signUp(String email, String password) async {
     try {
       UserCredential cred =
@@ -14,10 +13,9 @@ class AuthService {
         password: password,
       );
 
-      // 🔥 Save role in Firestore
       await _db.collection('users').doc(cred.user!.uid).set({
         'email': email,
-        'role': 'user', // default
+        'role': 'user',
         'createdAt': FieldValue.serverTimestamp(),
       });
 

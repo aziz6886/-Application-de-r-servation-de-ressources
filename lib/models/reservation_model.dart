@@ -21,7 +21,6 @@ class ReservationModel {
     required this.status,
   });
 
-  // 🔽 Convert Firestore → Model
   factory ReservationModel.fromFirestore(
       DocumentSnapshot doc,
       ) {
@@ -39,7 +38,6 @@ class ReservationModel {
     );
   }
 
-  // 🔼 Convert Model → Firestore
   Map<String, dynamic> toFirestore() {
     return {
       'resourceId': resourceId,
