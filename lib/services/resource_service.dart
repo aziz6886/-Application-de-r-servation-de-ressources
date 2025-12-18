@@ -2,16 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/resource_model.dart';
 
 class ResourceService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final _db = FirebaseFirestore.instance.collection('resources');
 
-  // STREAM: Get resources in real-time
   Stream<List<Resource>> getResources() {
-    return _db.collection('resources').snapshots().map(
-          (snapshot) {
-        return snapshot.docs.map(
-              (doc) => Resource.fromMap(doc.id, doc.data()),
-        ).toList();
-      },
+    return _db.snapshots().map(
+          (snapshot) => snapshot.docs
+          .map(
+            (doc) => Resource.fromMap(doc.id, doc.data()),
+      )
+          .toList(),
     );
+  }
+
+  /// CREATE
+  Future<void> addResource(Resource resource) async {
+    await _db.add(resource.toMap());
+  }
+
+  /// UPDATE
+  Future<void> updateResource(Resource resource) async {
+    await _db.doc(resource.id).update(resource.toMap());
+  }
+
+  /// DELETE
+  Future<void> deleteResource(String id) async {
+    await _db.doc(id).delete();
   }
 }

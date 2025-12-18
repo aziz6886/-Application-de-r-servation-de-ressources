@@ -5,25 +5,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
   User? user;
+  String role = 'user';
 
-  // LOGIN
   Future<bool> login(String email, String password) async {
     user = await _authService.login(email, password);
-    notifyListeners();
-    return user != null;
+    if (user != null) {
+      role = await _authService.getUserRole(user!.uid);
+      notifyListeners();
+      return true;
+    }
+    return false;
   }
 
-  // SIGN UP
   Future<bool> signUp(String email, String password) async {
     user = await _authService.signUp(email, password);
+    role = 'user';
     notifyListeners();
     return user != null;
   }
 
-  // LOGOUT
+  bool get isAdmin => role == 'admin';
+
   Future<void> logout() async {
     await _authService.logout();
     user = null;
+    role = 'user';
     notifyListeners();
   }
 }

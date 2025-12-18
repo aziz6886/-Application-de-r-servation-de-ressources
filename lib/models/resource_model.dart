@@ -27,4 +27,18 @@ class Resource {
       'imageUrl': imageUrl,
     };
   }
+
+  /// 🔧 ADD THIS
+  Resource copyWith({
+    String? name,
+    String? description,
+    String? imageUrl,
+  }) {
+    return Resource(
+      id: id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
+    );
+  }
 }
